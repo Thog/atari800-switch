@@ -29,7 +29,7 @@ AC_CONFIG_HEADER(config.h)
 dnl Set a8_target...
 
 case "$target" in
-    default | falcon | ps2 | rpi | android | windx | x11 | x11-shm | x11-motif | x11-xview | x11-xview-shm)
+    default | falcon | ps2 | switch | rpi | android | windx | x11 | x11-shm | x11-motif | x11-xview | x11-xview-shm)
         a8_target="$target"
         ;;
     shm | motif | xview | xview-shm)
@@ -50,6 +50,7 @@ case "$target" in
         echo "    falcon           (Atari Falcon: set --host=m68k-atari-mint)"
         echo "    ps2              (Sony PlayStation 2)"
         echo "    rpi              (Raspberry Pi: set --host=arm-linux)"
+        echo "    switch           (Nintendo Switch)"
         echo "    windx            (Windows with DirectX only)"
         echo "    x11              (Standard X11)"
         echo "    (x11-)motif      (Motif on X11)"
@@ -138,6 +139,17 @@ if [[ "$a8_target" = "ps2" ]]; then
     LDFLAGS="$LDFLAGS -T${PS2SDK}/ee/startup/linkfile"
     LDFLAGS="$LDFLAGS -L${PS2SDK}/ee/lib -L${GSKITSRC}/lib -L${PS2DEV}/ee/lib/gcc-lib/ee/3.2.2"
     LDFLAGS="$LDFLAGS -L${PS2SDK}/ports/lib"
+fi
+
+# Setup libtransistor environment (borrowed from the libtransistor.mk)
+if [[ "$a8_target" = "switch" ]]; then
+    CC=clang
+    LDFLAGS="$LDFLAGS -L${LIBTRANSISTOR_HOME}/build/newlib/aarch64-none-switch/newlib/"
+    AC_SUBST(LIBTRANSISTOR_HOME)
+    AC_DEFINE(HAVE_GETTIMEOFDAY)
+    AC_DEFINE(HAVE_STRCASECMP)
+    AC_DEFINE(SUPPORTS_PLATFORM_SLEEP)
+    AC_DEFINE(DEBUG)
 fi
 if [[ "$a8_target" = "rpi" ]]; then
     [[ -z "$RPI_SDK" ]] && RPI_SDK="/opt/vc"
@@ -317,6 +329,9 @@ dnl BeOS has a real issue with redundant-decls
         A8_NEED_LIB(c)
         OBJS="atari_ps2.o ps2kbd.s usbd.s audsrv.s"
         ;;
+    switch)
+        OBJS="switch/main.o switch/utils.o"
+    ;;
     rpi)
         AC_DEFINE(RPI,1,[Target: Raspberry Pi.])
         AC_DEFINE(GUI_SDL,1,[Use SDL for graphics and input.])

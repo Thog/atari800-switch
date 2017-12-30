@@ -264,12 +264,12 @@ static int MatchByName(char const *filename, int len, int only_if_not_set)
 
 int SYSROM_FindInDir(char const *directory, int only_if_not_set)
 {
-	DIR *dir;
+	/*DIR *dir;
 	struct dirent *entry;
 
-	if (only_if_not_set && num_unset_roms == 0)
+	if (only_if_not_set && num_unset_roms == 0)*/
 		/* No unset ROM paths left. */
-		return TRUE;
+	/*		return TRUE;
 
 	if ((dir = opendir(directory)) == NULL)
 		return FALSE;
@@ -282,13 +282,13 @@ int SYSROM_FindInDir(char const *directory, int only_if_not_set)
 		ULONG crc;
 		int matched_crc = FALSE;
 		Util_catpath(full_filename, directory, entry->d_name);
-		if ((file = fopen(full_filename, "rb")) == NULL)
+		if ((file = fopen(full_filename, "rb")) == NULL) */
 			/* Ignore non-readable files (e.g. directories). */
-			continue;
+		/*	continue;
 
-		len = Util_flen(file);
+		len = Util_flen(file);*/
 		/* Don't proceed to CRC computation if the file has invalid size. */
-		if (!IsLengthAllowed(len)){
+		/*if (!IsLengthAllowed(len)){
 			fclose(file);
 			continue;
 		}
@@ -298,10 +298,10 @@ int SYSROM_FindInDir(char const *directory, int only_if_not_set)
 			fclose(file);
 			continue;
 		}
-		fclose(file);
+		fclose(file);*/
 
 		/* Match ROM image by CRC. */
-		for (id = 0; id < SYSROM_SIZE; ++id) {
+		/*for (id = 0; id < SYSROM_SIZE; ++id) {
 			if ((!only_if_not_set || SYSROM_roms[id].unset)
 			    && SYSROM_roms[id].size == len
 			    && SYSROM_roms[id].crc32 != CRC_NULL && SYSROM_roms[id].crc32 == crc) {
@@ -312,9 +312,9 @@ int SYSROM_FindInDir(char const *directory, int only_if_not_set)
 			}
 		}
 
-		if (!matched_crc) {
+		if (!matched_crc) { */
 			/* Match custom ROM image by name. */
-			char *c = entry->d_name;
+		/*	char *c = entry->d_name;
 			while (*c != 0) {
 				*c = (char)tolower(*c);
 				++c;
@@ -328,7 +328,7 @@ int SYSROM_FindInDir(char const *directory, int only_if_not_set)
 		}
 	}
 
-	closedir(dir);
+	closedir(dir);*/
 	return TRUE;
 }
 

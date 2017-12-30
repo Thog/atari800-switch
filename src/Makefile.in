@@ -7,6 +7,12 @@ TARGET_BASE_NAME = atari800
 TARGET = $(TARGET_BASE_NAME)@EXEEXT@
 CONFIGURE_TARGET = @CONFIGURE_TARGET@
 CONFIGURE_HOST = @CONFIGURE_HOST@
+
+ifeq (@CONFIGURE_HOST@, switch)
+	LIBTRANSISTOR_HOME = @LIBTRANSISTOR_HOME@
+	include $(LIBTRANSISTOR_HOME)/libtransistor.mk
+endif
+
 ifeq (@CONFIGURE_HOST@, javanvm)
 	FINALTARGET = $(TARGET_BASE_NAME).jar
 	JAVAFLAGS = @JAVAFLAGS@
@@ -17,7 +23,11 @@ else
 	ifeq (@CONFIGURE_TARGET@,android)
 		FINALTARGET = android
 	else
-		FINALTARGET = $(TARGET)
+		ifeq (@CONFIGURE_TARGET@, switch)
+			FINALTARGET=$(TARGET_BASE_NAME).nro
+		else
+			FINALTARGET = $(TARGET)
+		endif
 	endif
 endif
 
@@ -115,6 +125,9 @@ android:
 	ant -f android/build.xml debug
 .PHONY: android
 
+$(TARGET_BASE_NAME).nro.so: ${OBJS} $(LIBTRANSITOR_NRO_LIB) $(LIBTRANSISTOR_COMMON_LIBS)
+	$(LD) $(LD_FLAGS) -o $@ ${OBJS} $(LIBTRANSISTOR_NRO_LDFLAGS) $(LIBS)
+
 $(TARGET): $(OBJS)
 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
 
@@ -131,6 +144,7 @@ clean:
 	rm -f javanvm/*.o javanvm/*.bak javanvm/*~
 	rm -f atari_ntsc/*.o atari_ntsc/*.bak atari_ntsc/*~
 	rm -rf android/libs android/obj android/bin android/gen
+	rm -f *.nro *.nro.so
 
 
 distclean: clean

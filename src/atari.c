@@ -1361,7 +1361,7 @@ void Atari800_Frame(void)
 				Atari800_display_screen = FALSE;
 		}
 		else
-			Atari800_Sync();
+			Atari800_Sync(); // YOU
 #endif /* BENCHMARK */
 }
 
