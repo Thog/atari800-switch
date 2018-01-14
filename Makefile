@@ -3,6 +3,7 @@ $(error "Please set LIBTRANSISTOR_HOME in your environment. export LIBTRANSISTOR
 endif
 
 PROGRAM := atari800
+ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 include $(LIBTRANSISTOR_HOME)/libtransistor.mk
 export LD
@@ -24,9 +25,6 @@ clean:
 	make -C src clean
 	rm src/Makefile
 
-run: all
-	ace exec /$(PROGRAM).nro
-
 src/Makefile:
 	mkdir -p $(@D)
-	cd $(@D); ./autogen.sh;  LIBTRANSISTOR_HOME=$(LIBTRANSISTOR_HOME)  ./configure "CFLAGS=$(CFLAGS)" --host=aarch64-none-switch --target=switch --with-video=no --with-sound=no -without-readline --prefix=/data/thog/Dev/Switch/atari800/build
+	cd $(@D); ./autogen.sh;  LIBTRANSISTOR_HOME=$(LIBTRANSISTOR_HOME)  ./configure "CFLAGS=$(CFLAGS)" --host=aarch64-none-switch --target=switch --prefix=$(ROOT_DIR)/build

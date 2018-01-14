@@ -145,11 +145,13 @@ fi
 if [[ "$a8_target" = "switch" ]]; then
     CC=clang
     LDFLAGS="$LDFLAGS -L${LIBTRANSISTOR_HOME}/build/newlib/aarch64-none-switch/newlib/"
+    with_readline=no
+    with_sound=no
+    with_video=no
     AC_SUBST(LIBTRANSISTOR_HOME)
     AC_DEFINE(HAVE_GETTIMEOFDAY)
     AC_DEFINE(HAVE_STRCASECMP)
     AC_DEFINE(SUPPORTS_PLATFORM_SLEEP)
-    AC_DEFINE(DEBUG)
 fi
 if [[ "$a8_target" = "rpi" ]]; then
     [[ -z "$RPI_SDK" ]] && RPI_SDK="/opt/vc"

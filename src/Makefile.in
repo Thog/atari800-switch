@@ -24,7 +24,7 @@ else
 		FINALTARGET = android
 	else
 		ifeq (@CONFIGURE_TARGET@, switch)
-			FINALTARGET=$(TARGET_BASE_NAME).nro
+			FINALTARGET=$(TARGET_BASE_NAME).nso
 		else
 			FINALTARGET = $(TARGET)
 		endif
@@ -128,6 +128,9 @@ android:
 $(TARGET_BASE_NAME).nro.so: ${OBJS} $(LIBTRANSITOR_NRO_LIB) $(LIBTRANSISTOR_COMMON_LIBS)
 	$(LD) $(LD_FLAGS) -o $@ ${OBJS} $(LIBTRANSISTOR_NRO_LDFLAGS) $(LIBS)
 
+$(TARGET_BASE_NAME).nso.so: ${OBJS} $(LIBTRANSISTOR_NSO_LIB) $(LIBTRANSISTOR_COMMON_LIBS)
+	$(LD) $(LD_FLAGS) -o $@ ${OBJS} $(LIBTRANSISTOR_NSO_LDFLAGS) $(LIBS)
+
 $(TARGET): $(OBJS)
 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
 
@@ -144,7 +147,7 @@ clean:
 	rm -f javanvm/*.o javanvm/*.bak javanvm/*~
 	rm -f atari_ntsc/*.o atari_ntsc/*.bak atari_ntsc/*~
 	rm -rf android/libs android/obj android/bin android/gen
-	rm -f *.nro *.nro.so
+	rm -f *.nso *.nro *.nro.so *.nso.so
 
 
 distclean: clean
